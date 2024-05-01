@@ -23,7 +23,7 @@ sequelize.sync().then(() => {
     key: fs.readFileSync(process.env.PRIVATE_KEY_PATH),
     cert: fs.readFileSync(process.env.CERT_PATH)
   }, app).listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log("⚙️  Server is running on port: " + process.env.PORT);
   });
 }).catch(error => {
   console.error('Unable to connect to the database:', error);

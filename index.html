@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebSocket Chat</title>
+</head>
+<body>
+  <h1>WebSocket Chat</h1>
+  <div>
+    <label for="userId">Recipient User ID:</label>
+    <input type="text" id="userId">
+  </div>
+  <div>
+    <label for="message">Message:</label>
+    <input type="text" id="message">
+  </div>
+  <button onclick="sendMessage()">Send Message</button>
+
+  <script>
+    const userIdInput = document.getElementById('userId');
+    const messageInput = document.getElementById('message');
+    const ws = new WebSocket('ws://localhost:5000');
+
+    ws.onopen = function() {
+      console.log('WebSocket connection established');
+    };
+
+    ws.onmessage = function(event) {
+      const data = JSON.parse(event.data);
+      console.log('Received message:', data.message);
+    };
+
+    ws.onerror = function(error) {
+      console.error('WebSocket error:', error);
+    };
+
+    function sendMessage() {
+      const userId = userIdInput.value;
+      const message = messageInput.value;
+      const data = { userId, message };
+      ws.send(JSON.stringify(data));
+    }
+
+    // Close WebSocket connection when the page is unloaded
+    window.addEventListener('beforeunload', function() {
+      ws.close();
+    });
+  </script>
+</body>
+</html>
